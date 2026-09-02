@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+body{
+    margin: 0;
+    font-size: 16px;
+    color: #3A2C24;
+    background-color: #FFF;
+    line-height: 1.6;
+    font-family: "Work Sans", sans-serif;
+}
+
+h1, h2, h3{
+    color:#4E342E;
+    margin-top: 0;
+}
+h1{ font-size: 32px;}
+h2{font-size: 26px;}
+h3{font-size: 18px;}
+
+
+ 
+a {
+
+  text-decoration: none;
+}
+
+.contenedor{
+    max-width: 720px;
+    margin: 10px auto;
+    padding: 24px;
+}
+
+#encabezado{
+    background-color: #4E342E;
+    border-bottom: 4px solid #B5652D;
+    
+}
+
+#encabezado .contenedor{
+    text-align: center;
+}
+
+.marca{
+    font-size: 26px;
+    font-family: "Fraunces", Georgia, serif;
+    color: white;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+#navegacion {
+  margin-top: 10px;
+}
+ 
+.seccion-clara{
+    background-color: white;
+}
+
+.seccion-oscura{
+    background-color: #F1E9DC;
+}
+
+.seccion .contenedor{
+    padding-top: 50px;
+    padding-bottom: 50px;
+    text-align: center;
+}
+
+
+.imagen-inicio {
+  width: 100%;
+  max-width: 480px;
+  border: 1px solid #F1E9DC;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+ 
+.boton {
+  
+  background-color: #4E342E;
+  color: #FFFFFF;
+  padding: 12px 28px;
+  border-radius: 999px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tabla-menu {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+ 
+.tabla-menu th,
+.tabla-menu td {
+  padding: 12px 16px;
+  border: 1px solid #B5652D;
+}
+ 
+.tabla-menu thead th {
+  background-color: #4E342E;
+  color: #FFFFFF;
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+}
+ 
+.lista-razones {
+  text-align: left;
+  max-width: 420px;
+  margin: 16px auto 0 auto;
+  padding-left: 20px;
+}
+ 
+ 
+.horario {
+  max-width: 320px;
+  margin: 32px auto 0 auto;
+  padding: 20px 24px;
+  background-color: #FFFFFF;
+  border: 1px solid #B5652D;
+  border-radius: 12px;
+  text-align: left;
+}
+ 
+.horario h3 {
+  border-bottom: 2px solid #B5652D;
+  padding-bottom: 8px;
+}
+ 
+.horario li { margin-bottom: 6px; font-size: 15px; }
+ 
+.volver {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 14px;
+  
+}
+
+.volver a{
+    color: #4E342E;
+}
+ 
+footer {
+  background-color: #4E342E;
+  color: #F1E9DC;
+  text-align: center;
+}
+ 
+footer p { margin: 4px 0; font-size: 14px; }
+
