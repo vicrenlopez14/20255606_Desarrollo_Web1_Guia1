@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo de Compras — Casa Rivas Electrónica</title>
+<meta name="description" content="Catálogo de repuestos y componentes electrónicos de Casa Rivas S.A. de C.V.">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Saltar al contenido</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="index.html" aria-label="Casa Rivas Electrónica — inicio">
+      <svg class="brand-mark" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+        <path d="M12 2l8 4.5v9L12 20l-8-4.5v-9L12 2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M12 8v4l3 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="brand-text">Casa Rivas <span class="brand-sub">Electrónica</span></span>
+    </a>
+
+    <form class="search-form" id="search-form" role="search">
+      <label class="sr-only" for="search-input">Buscar por descripción, PID o código</label>
+      <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <input id="search-input" type="search" placeholder="Buscar un repuesto: descripción, PID o código..." autocomplete="off">
+    </form>
+
+    <nav class="header-nav" aria-label="Navegación principal">
+      <a href="index.html" class="nav-link nav-current">Comprar</a>
+      <button type="button" class="nav-link cart-toggle" id="cart-toggle" aria-haspopup="dialog" aria-controls="cart-drawer">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+          <path d="M4 4h2l1.5 12.5A2 2 0 0 0 9.5 18h7a2 2 0 0 0 2-1.7L20 8H6.3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="10" cy="21" r="1.4" fill="currentColor"/>
+          <circle cx="17" cy="21" r="1.4" fill="currentColor"/>
+        </svg>
+        Mi Carrito
+        <span class="cart-count" id="cart-count" aria-hidden="true">0</span>
+      </button>
+      <a href="#" class="nav-link">Horarios</a>
+      <a href="#" class="nav-link">Trabajos</a>
+      <a href="#" class="nav-link">Iniciar Sesión</a>
+      <a href="#" class="nav-link nav-link-accent">Registrarme</a>
+    </nav>
+
+    <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-expanded="false" aria-controls="header-nav-mobile" aria-label="Abrir menú">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main-content">
+  <div class="page-heading">
+    <h1>Catálogo de Compras Casa Rivas S.A. de C.V.</h1>
+    <p class="page-sub">Repuestos y componentes electrónicos. Busca por descripción o, si ya conoces la pieza, por su código exacto.</p>
+  </div>
+
+  <section class="filters-bar" aria-label="Filtros de búsqueda">
+    <div class="filter-group">
+      <label for="filter-sg">Categoría</label>
+      <select id="filter-sg">
+        <option value="">Todas las categorías</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="filter-plu">PLU / PID</label>
+      <input id="filter-plu" type="text" inputmode="numeric" placeholder="Ej. 16743">
+    </div>
+
+    <div class="filter-group">
+      <label for="filter-cod">Código</label>
+      <input id="filter-cod" type="text" placeholder="Ej. 13-PRO1005NA">
+    </div>
+
+    <div class="filter-group">
+      <label for="filter-orden">Ordenar por</label>
+      <select id="filter-orden">
+        <option value="plu">PLU</option>
+        <option value="sg">Subgrupo</option>
+        <option value="codigo">Código</option>
+      </select>
+    </div>
+
+    <div class="filter-group filter-check">
+      <label><input type="checkbox" id="filter-imagen"> Con imagen</label>
+    </div>
+
+    <div class="filter-group filter-radio" role="radiogroup" aria-label="Qué productos mostrar">
+      <label><input type="radio" name="filter-web" value="todos" checked> Todos</label>
+      <label><input type="radio" name="filter-web" value="web"> Solo Web</label>
+    </div>
+
+    <button type="button" class="btn-ghost filter-clear" id="filter-clear">Limpiar filtros</button>
+  </section>
+
+  <div class="results-row">
+    <p class="results-status" id="results-status" role="status" aria-live="polite"></p>
+  </div>
+
+  <section class="product-grid" id="product-grid" aria-label="Resultados del catálogo"></section>
+
+  <div class="empty-state" id="empty-state" hidden>
+    <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <p>No encontramos productos con esos filtros.</p>
+    <button type="button" class="btn-primary" id="empty-state-clear">Limpiar filtros</button>
+  </div>
+
+  <nav class="pagination-bar" aria-label="Paginación de resultados">
+    <div class="per-page">
+      <label for="per-page-select">Items</label>
+      <select id="per-page-select">
+        <option value="2">2</option>
+        <option value="5">5</option>
+        <option value="10" selected>10</option>
+        <option value="20">20</option>
+        <option value="30">30</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+    <div class="page-controls" id="page-controls" role="group" aria-label="Páginas"></div>
+  </nav>
+</main>
+
+<div class="cart-backdrop" id="cart-backdrop" hidden></div>
+<aside class="cart-drawer" id="cart-drawer" aria-hidden="true" aria-label="Carrito de compras">
+  <div class="cart-drawer-header">
+    <h2>Mi Carrito</h2>
+    <button type="button" class="cart-close" id="cart-close" aria-label="Cerrar carrito">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="cart-drawer-body" id="cart-drawer-body"></div>
+</aside>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<footer class="site-footer">
+  <div class="footer-social">
+    <a href="https://www.facebook.com/casarivaselectronica" aria-label="Facebook" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M14 9h3V6h-3c-1.7 0-3 1.3-3 3v2H9v3h2v6h3v-6h3l1-3h-4V9c0-.6.4-1 1-1z" fill="currentColor"/></svg>
+    </a>
+    <a href="https://twitter.com/casarivas" aria-label="Twitter" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.4-1.3 1.7-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 0 0-7 3.7A11.6 11.6 0 0 1 3.4 4.6a4.1 4.1 0 0 0 1.3 5.5c-.7 0-1.3-.2-1.9-.5v.1c0 2 1.4 3.6 3.3 4a4.1 4.1 0 0 1-1.9.1 4.1 4.1 0 0 0 3.8 2.8A8.2 8.2 0 0 1 2 18.4a11.6 11.6 0 0 0 6.3 1.9c7.5 0 11.7-6.4 11.7-11.9v-.5c.8-.6 1.5-1.3 2-2z" fill="currentColor"/></svg>
+    </a>
+    <a href="https://wa.me/50377416056" aria-label="WhatsApp: Praviana 7741-6056" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm5.6 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.1.1-1.8-.1a11 11 0 0 1-3.9-2.4 10.9 10.9 0 0 1-2.1-3.4c-.3-.7-.1-1.4.4-1.9l.6-.6c.2-.2.3-.5.1-.8l-1-2.1c-.2-.4-.5-.4-.7-.4h-.6c-.2 0-.6.1-.9.5-.3.4-1.2 1.2-1.2 2.8s1.2 3.2 1.4 3.5c.2.2 2.4 3.9 6 5.2 3.6 1.3 3.6.9 4.2.8.7-.1 2.2-.9 2.5-1.7.3-.8.3-1.5.2-1.7-.1-.1-.4-.2-.7-.4z" fill="currentColor"/></svg>
+    </a>
+  </div>
+  <p>&copy; copyright Casa Rivas 2026, todos los derechos reservados.</p>
+  <p class="footer-note">Rediseño de demostración — solo HTML/CSS/JS vanilla, datos de catálogo ilustrativos.</p>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
