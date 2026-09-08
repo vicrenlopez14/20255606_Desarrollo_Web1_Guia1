@@ -92,3 +92,25 @@ a:hover {
     color: #7f8c8d; /* Gris suave para el texto del pie de página */
     font-family: 'Montserrat', sans-serif;
 }
+
+.analisis-correspondencia {
+    justify-self: center;
+}
+
+.analisis-correspondencia table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.analisis-correspondencia caption {
+    caption-side: bottom;
+}
+
+.analisis-correspondencia tbody tr {
+    height: 5rem;
+}
+
+.analisis-correspondencia thead, tfoot {
+    background-color: #0d81f3;
+    color: white;
+}
