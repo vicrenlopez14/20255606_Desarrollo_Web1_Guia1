@@ -42,7 +42,6 @@
     cartBody: document.getElementById('cart-drawer-body'),
     cartCount: document.getElementById('cart-count'),
     toast: document.getElementById('toast'),
-    mobileNavToggle: document.getElementById('mobile-nav-toggle'),
   };
 
   function escapeHtml(str) {
@@ -62,16 +61,16 @@
   }
 
   // ---------- Render de productos ----------
-  function productCardHtml(p) {
+  function productCardHtml(p, index) {
     return `
-      <article class="product-card" data-pid="${p.pid}">
+      <article class="product-card" data-pid="${p.pid}" style="--card-index:${index}">
         <div class="product-media" aria-hidden="true">
           <svg viewBox="0 0 24 24">${iconFor(p.sg)}</svg>
         </div>
         <div class="product-body">
           <div class="product-badge-row">
             <span class="product-badge">${escapeHtml(p.sg)} · ${escapeHtml(getSubgroupName(p.sg))}</span>
-            ${p.web ? '<span class="product-badge product-badge-web">Disponible en Web</span>' : ''}
+            ${p.web ? '<span class="product-badge product-badge-web">Web</span>' : ''}
           </div>
           <p class="product-desc">${escapeHtml(p.desc)}</p>
           <div class="product-meta">
@@ -82,7 +81,7 @@
             <label class="sr-only" for="qty-${p.pid}">Cantidad para ${escapeHtml(p.desc)}</label>
             <input class="qty-input" id="qty-${p.pid}" type="number" min="1" value="1" inputmode="numeric">
             <button type="button" class="btn-primary" data-add-to-cart="${p.pid}">
-              Agregar al Carrito
+              Agregar
             </button>
           </div>
         </div>
@@ -296,11 +295,6 @@
   });
 
   document.addEventListener('cart:changed', renderCart);
-
-  el.mobileNavToggle.addEventListener('click', () => {
-    const isOpen = document.body.classList.toggle('nav-open');
-    el.mobileNavToggle.setAttribute('aria-expanded', String(isOpen));
-  });
 
   function debounce(fn, ms) {
     let t;
