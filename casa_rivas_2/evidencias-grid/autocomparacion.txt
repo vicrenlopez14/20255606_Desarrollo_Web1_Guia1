@@ -1,0 +1,2 @@
+size=1440x3918 tolerance=16 pixel_similarity=100.0000% global_ssim=100.0000%
+PASS: pixel_similarity >= 85.00%

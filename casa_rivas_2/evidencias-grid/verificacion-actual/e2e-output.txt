@@ -1,0 +1,162 @@
+{
+  "captures": [
+    {
+      "name": "inicio-1440x900-full.png",
+      "file": "index.html",
+      "viewport": "1440x900"
+    },
+    {
+      "name": "inicio-900x900-full.png",
+      "file": "index.html",
+      "viewport": "900x900"
+    },
+    {
+      "name": "inicio-390x844-full.png",
+      "file": "index.html",
+      "viewport": "390x844"
+    },
+    {
+      "name": "servicios-1440x900-full.png",
+      "file": "servicios.html",
+      "viewport": "1440x900"
+    },
+    {
+      "name": "servicios-390x844-full.png",
+      "file": "servicios.html",
+      "viewport": "390x844"
+    },
+    {
+      "name": "visitanos-1440x900-full.png",
+      "file": "visitanos.html",
+      "viewport": "1440x900"
+    },
+    {
+      "name": "visitanos-390x844-full.png",
+      "file": "visitanos.html",
+      "viewport": "390x844"
+    }
+  ],
+  "navigation": [
+    {
+      "file": "index.html",
+      "status": 200,
+      "title": "Catálogo — Casa Rivas Electrónica"
+    },
+    {
+      "file": "servicios.html",
+      "status": 200,
+      "title": "Servicios — Casa Rivas Electrónica"
+    },
+    {
+      "file": "visitanos.html",
+      "status": 200,
+      "title": "Visítanos — Casa Rivas Electrónica"
+    }
+  ],
+  "functional": {
+    "initial": {
+      "cards": 10,
+      "status": "Mostrando 1–10 de 52 productos."
+    },
+    "search": {
+      "cards": 1,
+      "status": "Mostrando 1–1 de 1 producto."
+    },
+    "category": {
+      "cards": 4,
+      "badges": [
+        "REL · Relés",
+        "Web",
+        "REL · Relés",
+        "Web",
+        "REL · Relés",
+        "REL · Relés",
+        "Web"
+      ]
+    },
+    "additionalFilters": {
+      "withImageCards": 4,
+      "webOnlyCards": 3
+    },
+    "codeFilter": {
+      "cards": 1,
+      "status": "Mostrando 1–1 de 1 producto."
+    },
+    "order": {
+      "codes": [
+        "13-PRO1005NA",
+        "13-PRO1006NA",
+        "13-PRO1007NA",
+        "13-PRO1008NA",
+        "14-020-110V",
+        "14-021-012V",
+        "14-022-220V",
+        "14-030-NEMA17",
+        "15-FUS-10AL",
+        "15-FUS-1A"
+      ]
+    },
+    "pagination": {
+      "firstPage": "16743",
+      "secondPage": "20102",
+      "current": "page"
+    },
+    "cart": {
+      "count": "2",
+      "drawerHidden": "true"
+    },
+    "mobileMenu": {
+      "url": "http://127.0.0.1:4173/servicios.html",
+      "menuOpen": false
+    },
+    "mobileOverflow": [
+      {
+        "file": "index.html",
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "bodyScrollWidth": 390
+      },
+      {
+        "file": "servicios.html",
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "bodyScrollWidth": 390
+      },
+      {
+        "file": "visitanos.html",
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "bodyScrollWidth": 390
+      }
+    ]
+  },
+  "computed": {
+    "body": {
+      "display": "grid",
+      "areas": "\"header\" \"main\" \"footer\"",
+      "rows": "77px 3508.59px 332px",
+      "columns": "1440px",
+      "position": "static"
+    },
+    "main": {
+      "display": "grid",
+      "areas": "\"hero\" \"catalog\" \"editorial\"",
+      "rows": "829.188px 2016.62px 662.781px",
+      "columns": "1440px",
+      "position": "static"
+    },
+    "headerTop": {
+      "before": 0,
+      "after": 0
+    },
+    "inlineAttributes": 0,
+    "styleElements": 0,
+    "overflow": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "bodyScrollWidth": 1440
+    }
+  },
+  "consoleErrors": [],
+  "requestFailures": []
+}

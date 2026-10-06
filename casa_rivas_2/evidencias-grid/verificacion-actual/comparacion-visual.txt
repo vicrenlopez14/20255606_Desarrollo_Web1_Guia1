@@ -1,0 +1,21 @@
+=== inicio-1440x900-full.png ===
+size=1440x3918 tolerance=16 pixel_similarity=100.0000% global_ssim=100.0000%
+PASS: pixel_similarity >= 85.00%
+=== inicio-900x900-full.png ===
+size=900x4516 tolerance=16 pixel_similarity=100.0000% global_ssim=100.0000%
+PASS: pixel_similarity >= 85.00%
+=== inicio-390x844-full.png ===
+size=390x7997 tolerance=16 pixel_similarity=100.0000% global_ssim=100.0000%
+PASS: pixel_similarity >= 85.00%
+=== servicios-1440x900-full.png ===
+size=1440x3522 tolerance=16 pixel_similarity=100.0000% global_ssim=100.0000%
+PASS: pixel_similarity >= 85.00%
+=== servicios-390x844-full.png ===
+size=390x4268 tolerance=16 pixel_similarity=100.0000% global_ssim=100.0000%
+PASS: pixel_similarity >= 85.00%
+=== visitanos-1440x900-full.png ===
+size=1440x2862 tolerance=16 pixel_similarity=100.0000% global_ssim=100.0000%
+PASS: pixel_similarity >= 85.00%
+=== visitanos-390x844-full.png ===
+size=390x3554 tolerance=16 pixel_similarity=100.0000% global_ssim=100.0000%
+PASS: pixel_similarity >= 85.00%

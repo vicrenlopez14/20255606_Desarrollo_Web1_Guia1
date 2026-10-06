@@ -1,0 +1,10 @@
+$ node --check casa_rivas_2/js/{app,cart,data,site}.js
+exit=0
+$ git diff --check
+exit=0
+$ grep production inline styles
+matches=0
+$ nth/product counts
+nth_rules=100
+products=52
+configured_max_page=100

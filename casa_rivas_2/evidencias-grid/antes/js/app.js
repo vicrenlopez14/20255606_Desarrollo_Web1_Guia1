@@ -61,9 +61,9 @@
   }
 
   // ---------- Render de productos ----------
-  function productCardHtml(p) {
+  function productCardHtml(p, index) {
     return `
-      <article class="product-card" data-pid="${p.pid}">
+      <article class="product-card" data-pid="${p.pid}" style="--card-index:${index}">
         <div class="product-media" aria-hidden="true">
           <svg viewBox="0 0 24 24">${iconFor(p.sg)}</svg>
         </div>
