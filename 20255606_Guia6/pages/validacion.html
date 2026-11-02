@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/stylesFunciones.css" rel="stylesheet" />
+    <link rel="icon" href="../img/js.png" sizes="32x32" type="image/png" />
+    <title>Validación con expresiones regulares</title>
+</head>
+
+<body>
+    <header>
+        <div class="px-3 py-2 text-bg-dark fixed-top">
+            <div class="container">
+                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                    <a href="../indexFunciones.html"
+                        class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
+                        <img src="../img/js.png" alt="" width="32" height="32" class="me-2" />
+                    </a>
+
+                    <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small nav-bar">
+                        <li class="text-center">
+                            <a href="recursividad.html" class="nav-link text-white">
+                                <i class="bi bi-arrow-clockwise bi-2 d-block"></i>
+                                Recursividad
+                            </a>
+                        </li>
+                        <li class="text-center">
+                            <a href="tabla.html" class="nav-link text-white">
+                                <i class="bi bi-table bi-2 d-block"></i>
+                                Creando una Tabla
+                            </a>
+                        </li>
+                        <li class="text-center">
+                            <a href="formulario.html" class="nav-link text-white">
+                                <i class="bi bi-ui-checks bi-2 d-block"></i>
+                                Formulario
+                            </a>
+                        </li>
+                        <li class="text-center nav-bar-li-active">
+                            <a href="validacion.html" class="nav-link text-white">
+                                <i class="bi bi-shield-check bi-2 d-block"></i>
+                                Validación
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container-lg">
+<div class="row">
+    <div class="col-12 shadow-lg p-3 mt-5 bg-body rounded">
+        <h3>Ficha del estudiante</h3>
+        <form id="idFormValidacion" novalidate onsubmit="return false">
+            <div class="row g-3">
+                <div class="col-lg-4">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="idTxtCarnet" placeholder="Carnet" maxlength="5">
+                        <label for="idTxtCarnet"><i class="bi bi-person-badge"></i> Carnet</label>
+                        <div class="invalid-feedback">Formato: dos letras y tres números. Ejemplo: AB001</div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="idTxtNombreCompleto" placeholder="Nombre completo">
+                        <label for="idTxtNombreCompleto"><i class="bi bi-person-circle"></i> Nombre completo</label>
+                        <div class="invalid-feedback">Solo letras y espacios, nombre y apellido</div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="idTxtDui" placeholder="DUI" maxlength="10">
+                        <label for="idTxtDui"><i class="bi bi-card-text"></i> DUI</label>
+                        <div class="invalid-feedback">Formato: ########-#</div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="idTxtNit" placeholder="NIT" maxlength="17">
+                        <label for="idTxtNit"><i class="bi bi-card-list"></i> NIT</label>
+                        <div class="invalid-feedback">Formato: ####-######-###-#</div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="idTxtFechaNacimiento" placeholder="Fecha de nacimiento" maxlength="10">
+                        <label for="idTxtFechaNacimiento"><i class="bi bi-calendar-date"></i> Fecha de nacimiento</label>
+                        <div class="invalid-feedback">Formato: día/mes/año. Ejemplo: 25/12/2000</div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="idTxtCorreo" placeholder="Correo electrónico">
+                        <label for="idTxtCorreo"><i class="bi bi-envelope"></i> Correo electrónico</label>
+                        <div class="invalid-feedback">Ingrese un correo válido. Ejemplo: usuario@dominio.com</div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="idTxtEdad" placeholder="Edad" maxlength="3">
+                        <label for="idTxtEdad"><i class="bi bi-123"></i> Edad</label>
+                        <div class="invalid-feedback">Solo números</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 pt-3">
+                    <button id="idBtnValidar" type="button" class="btn btn-success">
+                        <i class="bi bi-check2-circle"></i> Validar datos
+                    </button>
+                    <button id="idBtnLimpiarValidacion" type="button" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Limpiar formulario
+                    </button>
+                </div>
+            </div>
+        </form>
+        <div id="idResultadoValidacion" class="d-none" role="alert"></div>
+    </div>
+
+    <div class="col-12 shadow-lg p-3 mt-5 bg-body rounded">
+        <h3>Expresiones regulares utilizadas</h3>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Campo</th>
+                        <th scope="col">Expresión regular</th>
+                        <th scope="col">Qué valida</th>
+                        <th scope="col">Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody id="idCuerpoPatrones"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+    </div>
+    <script src="../bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/validacion.js" defer></script>
+</body>
+
+</html>
