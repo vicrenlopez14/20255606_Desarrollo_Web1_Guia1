@@ -1,171 +1,735 @@
 <!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Guía 1</title>
-    <link rel="stylesheet" href="css/styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Portafolio — Desarrollo Web 1</title>
+<meta name="description" content="Portafolio de guías de Desarrollo Web 1 (ESEN), presentado como un escritorio de macOS.">
+<style>
+:root{
+  --bar-h:28px; --dock-h:84px;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Segoe UI",system-ui,sans-serif;
+  --win-bg:rgba(246,246,247,.88); --win-solid:#fff; --side-bg:rgba(228,230,235,.72);
+  --tb-bg:linear-gradient(#ececee,#e1e1e4); --tb-bg-off:#f3f3f5;
+  --text:#1d1d1f; --muted:#6e6e73; --line:rgba(0,0,0,.12); --sel:#0a62d0; --sel-soft:rgba(10,98,208,.18);
+  --menu-bg:rgba(255,255,255,.72); --menu-text:#111; --pop-bg:rgba(250,250,252,.82);
+  --shadow:0 22px 60px rgba(0,0,0,.38),0 0 0 .5px rgba(0,0,0,.35);
+  --shadow-off:0 10px 30px rgba(0,0,0,.28),0 0 0 .5px rgba(0,0,0,.3);
+}
+:root[data-theme="dark"]{
+  --win-bg:rgba(40,40,44,.88); --win-solid:#1e1e21; --side-bg:rgba(52,52,57,.7);
+  --tb-bg:linear-gradient(#3b3b40,#323236); --tb-bg-off:#2a2a2d;
+  --text:#f2f2f4; --muted:#a1a1a8; --line:rgba(255,255,255,.14); --sel:#3b8cff; --sel-soft:rgba(59,140,255,.28);
+  --menu-bg:rgba(30,30,34,.6); --menu-text:#f5f5f7; --pop-bg:rgba(40,40,45,.82);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--font);color:var(--text);-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;background:#222}
+button{font:inherit;color:inherit;background:none;border:0;cursor:default}
+
+/* ---------- Fondos ---------- */
+#wall{position:fixed;inset:0;transition:opacity .6s;background-size:cover}
+#wall[data-w="0"]{background:
+  radial-gradient(900px 600px at 82% 8%,rgba(255,196,140,.95),transparent 62%),
+  radial-gradient(1000px 800px at 12% 100%,rgba(88,64,255,.85),transparent 60%),
+  radial-gradient(800px 600px at 60% 70%,rgba(214,76,140,.8),transparent 65%),
+  linear-gradient(160deg,#2a1b6b,#9a3f8f 55%,#f08a5d)}
+#wall[data-w="1"]{background:
+  radial-gradient(900px 600px at 20% 10%,rgba(80,220,255,.7),transparent 60%),
+  radial-gradient(900px 700px at 90% 90%,rgba(120,70,255,.75),transparent 60%),
+  radial-gradient(700px 500px at 70% 30%,rgba(255,90,170,.5),transparent 65%),
+  linear-gradient(200deg,#07142e,#0f3b78 60%,#0a1f4d)}
+#wall[data-w="2"]{background:
+  radial-gradient(900px 600px at 85% 15%,rgba(255,236,150,.8),transparent 60%),
+  radial-gradient(1000px 700px at 10% 85%,rgba(20,150,120,.9),transparent 62%),
+  radial-gradient(700px 600px at 55% 55%,rgba(60,190,160,.55),transparent 65%),
+  linear-gradient(170deg,#0d3b3a,#1d7f74 55%,#a9d98a)}
+#wall::after{content:"";position:absolute;inset:0;background:
+  repeating-radial-gradient(circle at 70% 30%,rgba(255,255,255,.035) 0 2px,transparent 2px 46px);mix-blend-mode:overlay}
+
+/* ---------- Barra de menú ---------- */
+#menubar{position:fixed;inset:0 0 auto 0;height:var(--bar-h);z-index:5000;display:flex;align-items:center;justify-content:space-between;
+  padding:0 8px;background:var(--menu-bg);color:var(--menu-text);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);
+  font-size:13px;box-shadow:0 .5px 0 rgba(0,0,0,.25)}
+#menubar .l,#menubar .r{display:flex;align-items:center;height:100%}
+.mb{height:22px;padding:0 9px;border-radius:5px;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.mb:hover,.mb.open{background:rgba(127,127,127,.28)}
+.mb.app{font-weight:700}
+.mb svg{width:14px;height:14px;fill:currentColor}
+#clock{padding:0 8px;font-variant-numeric:tabular-nums}
+.dd{position:fixed;top:var(--bar-h);z-index:5100;min-width:230px;padding:5px;border-radius:9px;background:var(--pop-bg);color:var(--menu-text);
+  backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);box-shadow:0 12px 34px rgba(0,0,0,.35),0 0 0 .5px rgba(0,0,0,.3);font-size:13px;display:none}
+.dd.show{display:block}
+.dd button{display:flex;width:100%;text-align:left;padding:4px 10px;border-radius:5px;align-items:center;justify-content:space-between;gap:20px}
+.dd button:hover:not(:disabled){background:var(--sel);color:#fff}
+.dd button:disabled{opacity:.4}
+.dd hr{border:0;border-top:1px solid var(--line);margin:5px 8px}
+.dd kbd{font-family:inherit;opacity:.55;font-size:12px}
+
+/* ---------- Escritorio ---------- */
+#desktop{position:fixed;inset:var(--bar-h) 0 0 0;z-index:1}
+.di{position:absolute;width:92px;padding:4px 2px 6px;text-align:center;border-radius:8px;touch-action:none;cursor:default;outline:0}
+.di svg{width:60px;height:60px;display:block;margin:0 auto 3px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.3));pointer-events:none}
+.di span{display:inline-block;max-width:88px;font-size:12px;line-height:1.2;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.85);padding:1px 5px;border-radius:4px;word-break:break-word;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.di.sel span{background:var(--sel);text-shadow:none}
+.di.sel svg{filter:drop-shadow(0 3px 4px rgba(0,0,0,.3)) brightness(.8)}
+.di:focus-visible{box-shadow:0 0 0 2px #fff8}
+.di.dragging{opacity:.8;z-index:50}
+
+/* ---------- Ventanas ---------- */
+.win{position:fixed;z-index:10;display:flex;flex-direction:column;min-width:320px;min-height:220px;border-radius:12px;overflow:hidden;resize:both;
+  background:var(--win-bg);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);
+  box-shadow:var(--shadow-off);animation:pop .22s cubic-bezier(.2,.9,.3,1.2);transition:opacity .2s,transform .25s}
+.win.focused{box-shadow:var(--shadow)}
+/* WebKit pinta en blanco los iframes dentro de backdrop-filter: las ventanas del navegador son sólidas */
+.win[data-kind="browser"]{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--win-solid);animation:none;transform:translateZ(0)}
+.win[data-kind="browser"].closing{transform:scale(.94)}
+.win[data-kind="browser"].minimized{transform:translateY(60vh) scale(.2)}
+.win.closing{opacity:0;transform:scale(.94)}
+.win.minimized{opacity:0;transform:translateY(60vh) scale(.2);pointer-events:none}
+.win.gone{display:none}
+.win.max{left:0!important;top:var(--bar-h)!important;width:100%!important;height:calc(100% - var(--bar-h) - var(--dock-h))!important;border-radius:0;resize:none}
+@keyframes pop{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:none}}
+.tb{display:flex;align-items:center;gap:12px;height:52px;padding:0 14px;flex:none;background:var(--tb-bg);border-bottom:1px solid var(--line);cursor:default}
+.win:not(.focused) .tb{background:var(--tb-bg-off)}
+.win:not(.focused) .lights i{background:#8a8a8f!important}
+.win:not(.focused) iframe{pointer-events:none}
+body.dragging iframe{pointer-events:none!important}
+.lights{display:flex;gap:8px;flex:none}
+.lights i{width:12px;height:12px;border-radius:50%;display:grid;place-items:center;font:700 9px/1 var(--font);font-style:normal;color:rgba(0,0,0,.6);box-shadow:inset 0 0 0 .5px rgba(0,0,0,.25);cursor:default}
+.lights i.c{background:#ff5f57}.lights i.m{background:#febc2e}.lights i.x{background:#28c840}
+.lights i::before{opacity:0}
+.lights:hover i::before{opacity:1}
+.lights i.c::before{content:"×";font-size:11px}.lights i.m::before{content:"–"}.lights i.x::before{content:"+";font-size:11px}
+.tb .nav{display:flex;gap:2px;flex:none}
+.tb .nav button,.tb .tool{width:28px;height:26px;border-radius:6px;display:grid;place-items:center;color:var(--text)}
+.tb .nav button:hover:not(:disabled),.tb .tool:hover{background:rgba(127,127,127,.22)}
+.tb .nav button:disabled{opacity:.3}
+.tb svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.wt{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+.url{flex:1;min-width:0;height:26px;border-radius:7px;background:rgba(127,127,127,.18);display:flex;align-items:center;justify-content:center;gap:6px;font-size:12.5px;color:var(--text);padding:0 10px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.url svg{width:11px;height:11px;opacity:.6;flex:none}
+.url b{font-weight:500;overflow:hidden;text-overflow:ellipsis}
+.fb{display:flex;flex:1;min-height:0}
+.side{width:168px;flex:none;background:var(--side-bg);padding:12px 8px;overflow:auto;border-right:1px solid var(--line);font-size:13px}
+.side h6{font-size:11px;font-weight:600;color:var(--muted);margin:8px 8px 4px}
+.side button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:4px 8px;border-radius:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.side button svg{width:17px;height:17px;flex:none}
+.side button:hover{background:rgba(127,127,127,.15)}
+.side button.on{background:rgba(127,127,127,.28)}
+.grid{flex:1;min-width:0;overflow:auto;padding:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));grid-auto-rows:max-content;gap:6px;align-content:start;background:var(--win-solid)}
+.fi{padding:8px 4px;border-radius:8px;text-align:center;outline:0;cursor:default}
+.fi svg{width:58px;height:58px;display:block;margin:0 auto 4px}
+.fi span{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:12px;line-height:1.25;word-break:break-word;padding:1px 4px;border-radius:4px}
+.fi.sel{background:rgba(127,127,127,.2)}
+.fi.sel span{background:var(--sel);color:#fff}
+.fi:focus-visible{box-shadow:0 0 0 2px var(--sel)}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);margin-top:50px;font-size:13px}
+.status{flex:none;height:24px;display:flex;align-items:center;justify-content:center;font-size:11.5px;color:var(--muted);background:var(--win-solid);border-top:1px solid var(--line);padding:0 10px;text-align:center}
+.wframe{flex:1;width:100%;border:0;background:#fff;min-height:0}
+
+/* Notas */
+.paper{flex:1;overflow:auto;background:var(--win-solid);padding:26px 34px 34px;user-select:text;-webkit-user-select:text;font-size:14px;line-height:1.55}
+.paper h1{font-size:22px;margin-bottom:4px}.paper h2{font-size:16px;margin:18px 0 6px}
+.paper p{margin:8px 0}.paper .sub{color:var(--muted);font-size:12px;margin-bottom:14px}
+.paper a{color:var(--sel)}
+.paper table{border-collapse:collapse;width:100%;margin-top:10px;font-size:13px}
+.paper caption{caption-side:bottom;font-size:12px;color:var(--muted);padding-top:8px;text-align:left}
+.paper th,.paper td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+.paper thead th{background:rgba(127,127,127,.15)}
+.paper .tag{display:inline-block;padding:1px 8px;border-radius:99px;font-size:11.5px;font-weight:600;background:var(--sel-soft);color:var(--sel)}
+.about{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;padding:26px;background:var(--win-solid);user-select:text;-webkit-user-select:text}
+.about svg{width:92px;height:92px;margin-bottom:8px}
+.about h1{font-size:26px;font-weight:700}.about h3{font-size:13px;font-weight:500;color:var(--muted);margin-bottom:12px}
+.about dl{display:grid;grid-template-columns:auto auto;gap:3px 12px;font-size:12.5px;text-align:left}
+.about dt{color:var(--muted);text-align:right}
+
+/* ---------- Dock ---------- */
+#dockwrap{position:fixed;left:0;right:0;bottom:6px;z-index:4000;display:flex;justify-content:center;pointer-events:none}
+#dock{display:flex;align-items:flex-end;gap:6px;padding:6px 8px 7px;border-radius:22px;background:rgba(255,255,255,.22);border:.5px solid rgba(255,255,255,.4);
+  backdrop-filter:blur(28px) saturate(170%);-webkit-backdrop-filter:blur(28px) saturate(170%);box-shadow:0 10px 40px rgba(0,0,0,.35),inset 0 .5px 0 rgba(255,255,255,.4);pointer-events:auto;max-width:calc(100vw - 12px)}
+:root[data-theme="dark"] #dock{background:rgba(30,30,34,.35)}
+.dk{position:relative;width:52px;height:52px;flex:none;display:grid;place-items:end center;outline:0}
+#dock.leave .dk{transition:width .2s,height .2s}
+.dk svg{width:100%;height:100%;display:block;filter:drop-shadow(0 4px 5px rgba(0,0,0,.35));pointer-events:none}
+.dk::after{content:attr(data-label);position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%) scale(.9);padding:3px 11px;border-radius:7px;font-size:12.5px;white-space:nowrap;
+  background:var(--pop-bg);color:var(--menu-text);box-shadow:0 4px 14px rgba(0,0,0,.3),0 0 0 .5px rgba(0,0,0,.25);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);opacity:0;pointer-events:none;transition:opacity .12s,transform .12s}
+.dk:hover::after,.dk:focus-visible::after{opacity:1;transform:translateX(-50%)}
+.dk.on::before{content:"";position:absolute;bottom:-5px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:rgba(255,255,255,.85)}
+.dk.bounce svg{animation:bounce .7s ease-in-out 2}
+@keyframes bounce{0%,100%{transform:translateY(0)}40%{transform:translateY(-26px)}}
+.dk.mini{width:40px;height:40px}
+.dsep{width:1px;align-self:stretch;margin:4px 3px;background:rgba(255,255,255,.35);flex:none}
+.dsep.hide{display:none}
+.dk.shake svg{animation:shake .4s}
+@keyframes shake{25%{transform:rotate(-10deg)}75%{transform:rotate(10deg)}}
+
+/* ---------- Spotlight y toast ---------- */
+#spot{position:fixed;inset:0;z-index:6000;display:none;align-items:flex-start;justify-content:center;padding-top:16vh;background:rgba(0,0,0,.12)}
+#spot.show{display:flex}
+#spot .box{width:min(620px,calc(100vw - 24px));border-radius:16px;background:var(--pop-bg);color:var(--menu-text);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);
+  box-shadow:0 24px 70px rgba(0,0,0,.45),0 0 0 .5px rgba(0,0,0,.3);overflow:hidden;animation:pop .18s}
+#spot .q{display:flex;align-items:center;gap:12px;padding:14px 18px}
+#spot .q svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;opacity:.6;flex:none}
+#spot input{flex:1;background:none;border:0;outline:0;font:300 22px var(--font);color:inherit;user-select:text;-webkit-user-select:text}
+#spot ul{list-style:none;border-top:1px solid var(--line);max-height:50vh;overflow:auto;padding:6px}
+#spot li{display:flex;align-items:center;gap:12px;padding:6px 10px;border-radius:8px;font-size:14px}
+#spot li svg{width:30px;height:30px;flex:none}
+#spot li small{display:block;color:var(--muted);font-size:11.5px}
+#spot li.on{background:var(--sel);color:#fff}#spot li.on small{color:#ffffffb8}
+#spot .none{padding:16px;color:var(--muted);font-size:13px;text-align:center}
+#toast{position:fixed;left:50%;top:44px;transform:translate(-50%,-20px);z-index:6500;padding:8px 16px;border-radius:12px;background:var(--pop-bg);color:var(--menu-text);font-size:13px;
+  backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);box-shadow:0 8px 28px rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:.25s}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- Móvil ---------- */
+@media (max-width:700px){
+  :root{--dock-h:76px}
+  .win{left:0!important;top:var(--bar-h)!important;width:100%!important;height:calc(100% - var(--bar-h) - var(--dock-h))!important;border-radius:0 0 12px 12px;resize:none}
+  .side{display:none}
+  .mb:not(.app):not(.apple){display:none}
+  #clock{padding:0 4px}
+  .dk{width:46px;height:46px}
+  .tb{gap:8px;padding:0 10px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
 </head>
 <body>
-<header>
-    <h1 class="main-title">Ejemplos y ejercicios de la Guía 1</h1>
+
+<!-- Definiciones SVG compartidas -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="gFB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d9ceb"/><stop offset="1" stop-color="#2373d4"/></linearGradient>
+    <linearGradient id="gFF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8bd3ff"/><stop offset="1" stop-color="#3ea4f4"/></linearGradient>
+    <linearGradient id="gDoc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#e9ebef"/></linearGradient>
+    <linearGradient id="gFinder" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fd6ff"/><stop offset="1" stop-color="#1a72ee"/></linearGradient>
+    <linearGradient id="gSaf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdfdfd"/><stop offset="1" stop-color="#d9dde5"/></linearGradient>
+    <linearGradient id="gSafC" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3fc8ff"/><stop offset="1" stop-color="#0a6ff0"/></linearGradient>
+    <linearGradient id="gNote" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe45c"/><stop offset="1" stop-color="#ffc400"/></linearGradient>
+    <linearGradient id="gDl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6db5ff"/><stop offset="1" stop-color="#2b6ae0"/></linearGradient>
+    <linearGradient id="gTrash" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9ebef"/><stop offset="1" stop-color="#a9afba"/></linearGradient>
+  </defs>
+</svg>
+
+<div id="wall" data-w="0"></div>
+
+<header id="menubar">
+  <div class="l" id="menus"></div>
+  <div class="r">
+    <button class="mb" id="btnSpot" title="Spotlight (Ctrl/⌘ + K)" aria-label="Buscar"><svg viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></button>
+    <span class="mb" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 19.2a1.6 1.6 0 1 0 0 .01zM12 6C8.4 6 5.2 7.4 2.8 9.8l1.7 1.7A12 12 0 0 1 12 8.4c2.9 0 5.5 1 7.5 3.1l1.7-1.7A14.2 14.2 0 0 0 12 6zm0 5.2c-2.2 0-4.2.9-5.7 2.4L8 15.300A6.600 6.600 0 0 1 12 13.600c1.600 0 3.100.6 4.200 1.700l1.700-1.700A9.200 9.200 0 0 0 12 11.200z"/></svg></span>
+    <span class="mb" aria-hidden="true"><svg viewBox="0 0 28 24" style="width:22px"><rect x="1" y="6" width="21" height="12" rx="3.500" fill="none" stroke="currentColor" stroke-width="1.500" opacity=".7"/><rect x="3" y="8" width="14" height="8" rx="1.800"/><path d="M24 10v4c1-.3 1.700-1 1.700-2S25 10.300 24 10z" opacity=".7"/></svg></span>
+    <span id="clock" class="mb"></span>
+  </div>
 </header>
-<section class="intro">
-    <p class="intro-text">Seleccione uno de los siguientes enlaces para visitar los ejemplos, ejercicios y resultados
-        del proyecto de inteligencia artificial.</p>
-</section>
-<section class="country-section">
-    <article>
-        <h3>Ejemplo 1</h3>
 
-        <a href="estilos_embebidos.html">Ver ejemplo 1</a>
-    </article>
-    <article>
-        <h3>Ejemplo 2</h3>
+<main id="desktop" aria-label="Escritorio"></main>
 
-        <a href="ejemplo2.html">Ver ejemplo 2</a>
-    </article>
-    <article>
-        <h3>Países de Centroamérica</h3>
+<div id="dockwrap"><nav id="dock" aria-label="Dock"></nav></div>
 
-        <a href="paises.html">Ver países de Centroamérica</a>
-    </article>
-    <article>
-        <h3>Mi programa favorito</h3>
-        <p>Página sobre The Mentalist, sus personajes principales y los datos generales de la serie.</p>
-        <a href="programa_favorito.html">Ver mi programa favorito</a>
-    </article>
-</section>
-<section class="country-section">
-    <h2 class="subtitle">Proyecto de inteligencia artificial</h2>
-    <article>
-        <h3>1. Selección y diagnóstico</h3>
-        <p>Sitio salvadoreño seleccionado: Casa Rivas S.A. de C.V.</p>
-        <p>URL original: <a href="https://casarivas.com/load_productos_catalog" target=" blank">https://casarivas.com/load_productos_catalog</a>
-        </p>
-        <img src="https://image.thum.io/get/width/1200/crop/900/https://casarivas.com/load_productos_catalog"
-             alt="Captura de la página de inicio original de Casa Rivas" class="country-image">
-    </article>
-    <article>
-        <h3>Resultados publicados</h3>
-        <p>Resultado del prompt genérico:</p>
-        <a href="casa_rivas_1/index.html" target=" blank">Abrir Casa Rivas — resultado genérico</a>
-        <p>Resultado del prompt elaborado:</p>
-        <a href="casa_rivas_2/index.html" target=" blank">Abrir Casa Rivas — resultado elaborado</a>
-    </article>
-    <article>
-        <h3>Video explicativo</h3>
-        <a href="https://youtu.be/ELOPTB6A_js" target=" blank">Ver video explicativo en YouTube</a>
+<div id="spot" role="dialog" aria-label="Buscar">
+  <div class="box">
+    <div class="q"><svg viewBox="0 0 24 24"><circle cx="10.500" cy="10.500" r="6.500"/><path d="m16 16 5 5"/></svg><input id="spotq" placeholder="Buscar guías, ejemplos y ejercicios" autocomplete="off" spellcheck="false"></div>
+    <ul id="spotl"></ul>
+  </div>
+</div>
+<div id="toast"></div>
 
-        <table class="analisis-correspondencia">
-            <caption>Elementos encontrados en el resultado generado por la IA (Se que la guía dice 2 columnas, pero me pareció más bonito organizarlo así en 3.</caption>
-            <thead>
-            <tr>
-                <th colspan="3">Análisis de correspondencia</th>
-            </tr>
-            <tr>
-                <th scope="col">
-                    Elemento
-                </th>
-                <th scope="col">
-                    Función que cumple
-                </th>
-                <th scope="col">
-                    Clasificación
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <th>Etiquetas svg y path </th>
-                <td>Las usó en conjunto para generar el logo de Casa Rivas a forma de vectores con trazos manuales sin usar el original.</td>
-                <th>Nuevo</th>
-            </tr>
-            <tr>
-                <th>Etiquetas HTML 5 </th>
-                <td>A pesar de no haberlo especificado explícitamente, sí usó la semántica requerida por HTML 5 que hemos visto en clase. No recurrió al uso excesivo de div's.</td>
-                <th>Conocido</th>
-            </tr>
-            <tr>
-                <th>Atributos aria</th>
-                <td>Dotan a lectores de discapacidad de mejor accesibilidad para usuarios con visión reducida.</td>
-                <th>Nuevo</th>
-            </tr>
-            </tbody>
-        </table>
-    </article>
-</section>
-<section class="country-section">
-    <h2 class="subtitle">Guía 2 — Selectores CSS avanzados y modelo de caja</h2>
-    <article>
-        <h3>Ejercicio 1 — Altamar</h3>
-        <a href="20255606_Guia2/pelicula.html">Ver ejercicio 1</a>
-    </article>
-    <article>
-        <h3>Ejercicio 2 — Tablero de damas</h3>
-        <a href="20255606_Guia2/tablero.html">Ver ejercicio 2</a>
-    </article>
-    <article>
-        <h3>Ejercicio complementario — Biografía</h3>
-        <a href="20255606_Guia2/biografia.html">Ver biografía</a>
-    </article>
-    <article>
-        <h3>Reto IA</h3>
-        <a href="https://youtu.be/gZFSOnBDXsc" target="_blank">Ver vídeo del reto</a>
+<script>
+(() => {
+'use strict';
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const store = { get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }, set(k,v){ try { localStorage.setItem(k,v); } catch(e){} } };
+const isMobile = () => innerWidth <= 700;
 
-        <p>Resultado final:</p>
-        <a href="casa_rivas_2/index.html" target=" blank">Abrir Casa Rivas — resultado final. Ahora elaborado con Codex y potenciado por un DESIGN.md</a>
-    </article>
-</section>
-<section class="country-section">
-    <h2 class="subtitle">Guía 3 — Posicionamiento, visualización y maquetación de sitios web</h2>
-    <article>
-        <h3>Ejemplo 1 — Maravillas del Mundo</h3>
-        <a href="20255606_Guia3/ejemplo1/index.html">Ver ejemplo 1</a>
-    </article>
-    <article>
-        <h3>Ejemplo 2 — Compañía Miau</h3>
-        <a href="20255606_Guia3/ejemplo2/index.html">Ver ejemplo 2</a>
-    </article>
-    <article>
-        <h3>Ejercicio complementario — Posicionamiento y z-index</h3>
-        <p><a href="20255606_Guia3/ejercicio/ejercicio.html">Resultado 1</a></p>
-        <p><a href="20255606_Guia3/ejercicio/ejercicio2.html">Resultado 2</a></p>
-    </article>
-    <article>
-        <h3>Reto IA — CSS Grid</h3>
-        <a href="casa_rivas_2/index.html">Abrir Casa Rivas — versión con CSS Grid</a>
-    </article>
-</section>
-<section class="country-section">
-    <h2 class="subtitle">Guía 5 — Introducción a JavaScript</h2>
-    <article>
-        <h3>Ejemplos 1 al 4 y ejercicio 1</h3>
-        <a href="20255606_Guia5/index.html">Ver ejemplos</a>
-    </article>
-    <article>
-        <h3>Ejercicio 2 — Pedidos de cafetería</h3>
-        <a href="20255606_Guia5/pages/pedidos.html">Ver ejercicio 2</a>
-    </article>
-</section>
-<section class="country-section">
-    <h2 class="subtitle">Guía 6 — Funciones y eventos en JavaScript</h2>
-    <article>
-        <h3>Parte I — Estructuras de control y arreglos</h3>
-        <a href="20255606_Guia6/index.html">Ver ejemplos</a>
-    </article>
-    <article>
-        <h3>Parte II — Funciones</h3>
-        <a href="20255606_Guia6/indexFunciones.html">Ver ejemplos</a>
-    </article>
-    <article>
-        <h3>Ejercicios complementarios</h3>
-        <p><a href="20255606_Guia6/pages/formulario.html">Ejercicios 1 y 2 — Editar, eliminar y LocalStorage</a></p>
-        <p><a href="20255606_Guia6/pages/validacion.html">Ejercicio 3 — Expresiones regulares</a></p>
-    </article>
-</section>
-<footer>
-    <p class="footer-text">Guía de ejercicios de HTML, CSS e inteligencia artificial.</p>
-</footer>
+/* =====================================================
+   Contenido: cada guía es una carpeta, cada recurso un fichero
+   ===================================================== */
+const YT_RETO2 = 'https://youtu.be/gZFSOnBDXsc';
+const doc = (name, href, extra = {}) => ({ name, type: 'html', href, ...extra });
+const pdf = (name, href) => ({ name, type: 'pdf', href });
+const link = (name, href, extra = {}) => ({ name, type: 'link', href, ...extra });
+
+const ROOT = { name: 'Escritorio', type: 'folder', kids: [
+  { name: 'Guía 1', type: 'folder', desc: 'Ejemplos y ejercicios de HTML y proyecto de IA', kids: [
+    doc('Ejemplo 1', 'estilos_embebidos.html'),
+    doc('Ejemplo 2', 'ejemplo2.html'),
+    doc('Países de Centroamérica', 'paises.html'),
+    doc('Mi programa favorito (The Mentalist)', 'programa_favorito.html'),
+    { name: 'Proyecto de IA', type: 'folder', desc: 'Casa Rivas S.A. de C.V. — selección, resultados y análisis', kids: [
+      link('Sitio original — Casa Rivas', 'https://casarivas.com/load_productos_catalog'),
+      doc('Resultado del prompt genérico', 'casa_rivas_1/index.html'),
+      doc('Resultado del prompt elaborado', 'casa_rivas_2/index.html'),
+      link('Video explicativo', 'https://youtu.be/ELOPTB6A_js'),
+      { name: 'Análisis de correspondencia', type: 'note', note: 'analisis' },
+    ]},
+  ]},
+  { name: 'Guía 2', type: 'folder', desc: 'Selectores CSS avanzados y modelo de caja', kids: [
+    doc('Ejercicio 1 — Altamar', '20255606_Guia2/pelicula.html'),
+    doc('Ejercicio 2 — Tablero de damas', '20255606_Guia2/tablero.html'),
+    doc('Ejercicio complementario — Biografía', '20255606_Guia2/biografia.html'),
+    link('Reto IA — Video', YT_RETO2),
+    doc('Reto IA — Casa Rivas final (Codex + DESIGN.md)', 'casa_rivas_2/index.html'),
+    pdf('Guía 2 (PDF)', 'Guia 2_.pdf'),
+  ]},
+  { name: 'Guía 3', type: 'folder', desc: 'Posicionamiento, visualización y maquetación de sitios web', kids: [
+    doc('Ejemplo 1 — Maravillas del Mundo', '20255606_Guia3/ejemplo1/index.html'),
+    doc('Ejemplo 2 — Compañía Miau', '20255606_Guia3/ejemplo2/index.html'),
+    doc('Posicionamiento y z-index — Resultado 1', '20255606_Guia3/ejercicio/ejercicio.html'),
+    doc('Posicionamiento y z-index — Resultado 2', '20255606_Guia3/ejercicio/ejercicio2.html'),
+    doc('Reto IA — Casa Rivas con CSS Grid', 'casa_rivas_2/index.html'),
+    pdf('Guía 3 (PDF)', 'Guia 3. Posicionamiento, visualización y maquetación de sitios web.pdf'),
+  ]},
+  { name: 'Guía 5', type: 'folder', desc: 'Introducción a JavaScript', kids: [
+    doc('Ejemplos 1 al 4 y ejercicio 1', '20255606_Guia5/index.html'),
+    doc('Ejercicio 2 — Pedidos de cafetería', '20255606_Guia5/pages/pedidos.html'),
+    pdf('Guía 5 (PDF)', '20255606_Guia5/Guia 05. Introduccion a JS.pdf'),
+  ]},
+  { name: 'Guía 6', type: 'folder', desc: 'Funciones y eventos en JavaScript', kids: [
+    doc('Parte I — Estructuras de control y arreglos', '20255606_Guia6/index.html'),
+    doc('Parte II — Funciones', '20255606_Guia6/indexFunciones.html'),
+    doc('Ejercicios 1 y 2 — Editar, eliminar y LocalStorage', '20255606_Guia6/pages/formulario.html'),
+    doc('Ejercicio 3 — Expresiones regulares', '20255606_Guia6/pages/validacion.html'),
+    pdf('Guía 6 (PDF)', '20255606_Guia6/Guia 06.pdf'),
+  ]},
+  { name: 'Léeme', type: 'note', note: 'readme' },
+]};
+
+// Índices auxiliares
+(function walk(n, path) { n.path = path; (n.kids || []).forEach(k => { k.parent = n; walk(k, path.concat(n.name)); }); })(ROOT, []);
+const flat = []; (function f(n){ (n.kids||[]).forEach(k => { flat.push(k); f(k); }); })(ROOT);
+const PDFS = { name: 'Descargas', type: 'folder', desc: 'Todas las guías en PDF', path: [], kids: flat.filter(i => i.type === 'pdf') };
+const GUIDES = ROOT.kids.filter(k => k.type === 'folder');
+
+/* Notas */
+const NOTES = {
+  readme: { title: 'Léeme', html: () => `
+    <h1>Bienvenido al escritorio</h1>
+    <p class="sub">Portafolio de Desarrollo Web 1 · ESEN</p>
+    <p>Cada <b>carpeta</b> es una guía y cada <b>fichero</b> es un ejemplo, ejercicio o PDF.</p>
+    <h2>Cómo moverte</h2>
+    <p>• <b>Doble clic</b> abre carpetas y ficheros (en pantallas táctiles basta un toque).<br>
+       • Arrastra ventanas por la barra de título y redimensiónalas desde la esquina.<br>
+       • Los botones de colores cierran, minimizan y maximizan.<br>
+       • <b>Ctrl/⌘ + K</b> abre Spotlight para buscar cualquier recurso.<br>
+       • Menú <b></b> → cambia el fondo o activa el modo oscuro.</p>
+    <p class="sub">Los enlaces a YouTube y al sitio original de Casa Rivas se abren en una pestaña nueva.</p>` },
+  analisis: { title: 'Análisis de correspondencia', html: () => `
+    <h1>Análisis de correspondencia</h1>
+    <p class="sub">Proyecto de IA · Casa Rivas S.A. de C.V.</p>
+    <table>
+      <caption>Elementos encontrados en el resultado generado por la IA. Sé que la guía dice 2 columnas, pero me pareció más bonito organizarlo así en 3.</caption>
+      <thead><tr><th>Elemento</th><th>Función que cumple</th><th>Clasificación</th></tr></thead>
+      <tbody>
+        <tr><th>Etiquetas svg y path</th><td>Las usó en conjunto para generar el logo de Casa Rivas a forma de vectores con trazos manuales sin usar el original.</td><td><span class="tag">Nuevo</span></td></tr>
+        <tr><th>Etiquetas HTML 5</th><td>A pesar de no haberlo especificado explícitamente, sí usó la semántica requerida por HTML 5 que hemos visto en clase. No recurrió al uso excesivo de div's.</td><td><span class="tag">Conocido</span></td></tr>
+        <tr><th>Atributos aria</th><td>Dotan a lectores de discapacidad de mejor accesibilidad para usuarios con visión reducida.</td><td><span class="tag">Nuevo</span></td></tr>
+      </tbody>
+    </table>` },
+};
+
+/* =====================================================
+   Iconos
+   ===================================================== */
+const ICONS = {
+  folder: `<svg viewBox="0 0 64 64"><path d="M5 14a5 5 0 0 1 5-5h14.500l6 6H54a5 5 0 0 1 5 5v31a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5z" fill="url(#gFB)"/><rect x="5" y="21" width="54" height="34" rx="5" fill="url(#gFF)"/><rect x="5" y="21" width="54" height="1.500" fill="#fff" opacity=".45"/></svg>`,
+  doc: (label, color) => `<svg viewBox="0 0 64 64"><path d="M14 4h26l13 13v40a3 3 0 0 1-3 3H14a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3z" fill="url(#gDoc)" stroke="#c4c8d0" stroke-width="1"/><path d="M40 4v10a3 3 0 0 0 3 3h10z" fill="#d7dae0"/><rect x="11" y="37" width="34" height="14" rx="2.500" fill="${color}"/><text x="28" y="47.500" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-weight="700" font-size="9" fill="#fff" letter-spacing=".4">${label}</text><g stroke="#c4c8d0" stroke-width="2" stroke-linecap="round"><path d="M18 22h18M18 28h14"/></g></svg>`,
+};
+const iconFor = it => it.type === 'folder' ? ICONS.folder
+  : it.type === 'pdf' ? ICONS.doc('PDF', '#e5382d')
+  : it.type === 'link' ? ICONS.doc('WEB', '#7a4fd8')
+  : it.type === 'note' ? ICONS.doc('TXT', '#e2a400')
+  : ICONS.doc('HTML', '#1b7cf0');
+
+const APPS = {
+  finder: `<svg viewBox="0 0 64 64"><rect x="2" y="2" width="60" height="60" rx="14" fill="url(#gFinder)"/><path d="M32 2h16a14 14 0 0 1 14 14v32a14 14 0 0 1-14 14H32c-3-8-3-14-1-22 1.500-6 1.500-12 1-20z" fill="#0f4fc4" opacity=".28"/><g stroke="#fff" stroke-width="3.200" stroke-linecap="round" fill="none"><path d="M23 22v7M41 22v7"/><path d="M19 40c7 8 19 8 26 0"/><path d="M32 22c-1 8 0 14 3 18"/></g></svg>`,
+  safari: `<svg viewBox="0 0 64 64"><rect x="2" y="2" width="60" height="60" rx="14" fill="url(#gSaf)"/><circle cx="32" cy="32" r="22" fill="url(#gSafC)" stroke="#fff" stroke-width="2"/><g stroke="#fff" stroke-width="1.400" opacity=".8"><path d="M32 12v4M32 48v4M12 32h4M48 32h4"/></g><path d="M44 20 36 36 20 44 28 28z" fill="#fff"/><path d="M44 20 36 36 28 28z" fill="#ff4a42"/></svg>`,
+  notes: `<svg viewBox="0 0 64 64"><rect x="2" y="2" width="60" height="60" rx="14" fill="#fff"/><path d="M2 16A14 14 0 0 1 16 2h32a14 14 0 0 1 14 14v6H2z" fill="url(#gNote)"/><g stroke="#d9dce2" stroke-width="2"><path d="M10 31h44M10 40h44M10 49h44"/></g></svg>`,
+  dl: `<svg viewBox="0 0 64 64"><rect x="2" y="2" width="60" height="60" rx="14" fill="url(#gDl)"/><circle cx="32" cy="32" r="17" fill="none" stroke="#fff" stroke-width="3" opacity=".9"/><path d="M32 21v18m-8-7 8 8 8-8" fill="none" stroke="#fff" stroke-width="3.600" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  trash: `<svg viewBox="0 0 64 64"><rect x="2" y="2" width="60" height="60" rx="14" fill="url(#gTrash)"/><g fill="none" stroke="#6b7280" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 22h28M27 22v-4h10v4M20 22l2 24a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3l2-24"/><path d="M28 29v14M36 29v14"/></g></svg>`,
+};
+const appIcon = (it) => it.type === 'folder' ? ICONS.folder : iconFor(it);
+const GLYPH = {
+  back: '<svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>',
+  fwd: '<svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>',
+  out: '<svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>',
+  reload: '<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.500-5.800M20 4v5h-5"/></svg>',
+  lock: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1zm2 0h6V8a3 3 0 0 0-6 0z"/></svg>',
+};
+
+/* =====================================================
+   Toast
+   ===================================================== */
+let toastT;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2200); }
+
+/* =====================================================
+   Gestor de ventanas
+   ===================================================== */
+let zTop = 20, cascade = 0, uid = 0, focusedId = null;
+const wins = new Map();
+const APPNAME = { finder: 'Finder', browser: 'Safari', note: 'Notas', about: 'Finder' };
+
+function makeWin({ kind, title, w = 780, h = 500, icon, bar, body, status }) {
+  const id = ++uid;
+  const el = document.createElement('section');
+  el.className = 'win';
+  el.dataset.kind = kind;
+  el.setAttribute('aria-label', title);
+  el.innerHTML = `<div class="tb"><div class="lights"><i class="c" role="button" aria-label="Cerrar"></i><i class="m" role="button" aria-label="Minimizar"></i><i class="x" role="button" aria-label="Maximizar"></i></div>${bar}</div>${body}${status ? `<div class="status"></div>` : ''}`;
+  const W = Math.min(w, innerWidth - 24), H = Math.min(h, innerHeight - 28 - 100);
+  const c = cascade++ % 7;
+  el.style.width = W + 'px'; el.style.height = H + 'px';
+  el.style.left = Math.max(8, Math.min((innerWidth - W) / 2 + (c - 3) * 30, innerWidth - W - 8)) + 'px';
+  el.style.top = Math.max(36, Math.min(54 + c * 28, innerHeight - H - 96)) + 'px';
+  document.body.appendChild(el);
+
+  const rec = { id, el, kind, title, icon, minItem: null };
+  wins.set(id, rec);
+  el.addEventListener('pointerdown', () => focusWin(id), true);
+
+  $('.lights .c', el).onclick = () => closeWin(id);
+  $('.lights .m', el).onclick = () => minWin(id);
+  $('.lights .x', el).onclick = () => el.classList.toggle('max');
+  $('.tb', el).addEventListener('dblclick', e => { if (e.target.closest('button,.lights,.url')) return; if (!isMobile()) el.classList.toggle('max'); });
+
+  // Arrastrar por la barra de título
+  $('.tb', el).addEventListener('pointerdown', e => {
+    if (e.button !== 0 || e.target.closest('button,.lights') || el.classList.contains('max') || isMobile()) return;
+    const r = el.getBoundingClientRect(), dx = e.clientX - r.left, dy = e.clientY - r.top;
+    document.body.classList.add('dragging');
+    const move = ev => {
+      el.style.left = Math.min(innerWidth - 80, Math.max(-r.width + 100, ev.clientX - dx)) + 'px';
+      el.style.top = Math.min(innerHeight - 40, Math.max(28, ev.clientY - dy)) + 'px';
+    };
+    const up = () => { document.body.classList.remove('dragging'); removeEventListener('pointermove', move); removeEventListener('pointerup', up); };
+    addEventListener('pointermove', move); addEventListener('pointerup', up);
+  });
+  // Evitar que el redimensionado nativo pase por iframes
+  el.addEventListener('pointerdown', e => { if (e.target === el) document.body.classList.add('dragging'); });
+  addEventListener('pointerup', () => document.body.classList.remove('dragging'));
+
+  focusWin(id);
+  bounceDock(kind === 'browser' ? 'safari' : kind === 'note' ? 'notes' : 'finder');
+  return rec;
+}
+function focusWin(id) {
+  const r = wins.get(id); if (!r) return;
+  if (r.el.classList.contains('minimized')) restoreWin(id);
+  focusedId = id; r.el.style.zIndex = ++zTop;
+  wins.forEach(x => x.el.classList.toggle('focused', x.id === id));
+  setAppName(APPNAME[r.kind]);
+  syncDockDots();
+}
+function closeWin(id) {
+  const r = wins.get(id); if (!r) return;
+  r.el.classList.add('closing');
+  if (r.minItem) { r.minItem.remove(); r.minItem = null; updateSep(); }
+  wins.delete(id);
+  setTimeout(() => r.el.remove(), 200);
+  if (focusedId === id) {
+    const next = [...wins.values()].filter(x => !x.el.classList.contains('minimized')).sort((a, b) => b.el.style.zIndex - a.el.style.zIndex)[0];
+    next ? focusWin(next.id) : (focusedId = null, setAppName('Finder'));
+  }
+  syncDockDots();
+}
+function minWin(id) {
+  const r = wins.get(id); if (!r || r.minItem) return;
+  r.el.classList.add('minimized'); r.el.classList.remove('focused');
+  const b = document.createElement('button');
+  b.className = 'dk mini'; b.dataset.label = r.title; b.innerHTML = r.icon; b.onclick = () => restoreWin(id);
+  $('#dockMin').appendChild(b); r.minItem = b; updateSep();
+  const next = [...wins.values()].filter(x => !x.el.classList.contains('minimized')).sort((a, b2) => b2.el.style.zIndex - a.el.style.zIndex)[0];
+  next ? focusWin(next.id) : (focusedId = null, setAppName('Finder'));
+}
+function restoreWin(id) {
+  const r = wins.get(id); if (!r) return;
+  r.el.classList.remove('minimized');
+  if (r.minItem) { r.minItem.remove(); r.minItem = null; updateSep(); }
+  focusWin(id);
+}
+
+/* =====================================================
+   Tipos de ventana
+   ===================================================== */
+function crumb(n) { return n === ROOT ? 'Escritorio' : n.name; }
+
+function openFinder(node = ROOT) {
+  const st = { stack: [node], i: 0, sel: null };
+  const side = [`<h6>Favoritos</h6>`,
+    `<button data-f="root">${ICONS.folder}Escritorio</button>`,
+    ...GUIDES.map((g, k) => `<button data-f="${k}">${ICONS.folder}${esc(g.name)}</button>`),
+    `<h6>Ubicaciones</h6>`, `<button data-f="pdf">${APPS.dl}Descargas</button>`].join('');
+  const rec = makeWin({
+    kind: 'finder', title: node.name, icon: ICONS.folder, status: true,
+    bar: `<div class="nav"><button data-n="b" aria-label="Atrás">${GLYPH.back}</button><button data-n="f" aria-label="Adelante">${GLYPH.fwd}</button></div><div class="wt"></div>`,
+    body: `<div class="fb"><aside class="side">${side}</aside><div class="grid" tabindex="0"></div></div>`,
+  });
+  const el = rec.el, grid = $('.grid', el), wt = $('.wt', el), status = $('.status', el);
+  const cur = () => st.stack[st.i];
+  const sideNode = v => v === 'root' ? ROOT : v === 'pdf' ? PDFS : GUIDES[+v];
+  function render() {
+    const n = cur();
+    wt.textContent = n === ROOT ? 'Escritorio' : n.path.slice(1).concat(n.name).join(' › ');
+    rec.title = n.name; el.setAttribute('aria-label', n.name);
+    const kids = n.kids || [];
+    grid.innerHTML = kids.length ? kids.map((k, idx) => `<div class="fi" tabindex="0" data-i="${idx}" title="${esc(k.name)}">${iconFor(k)}<span>${esc(k.name)}</span></div>`).join('') : `<div class="empty">Carpeta vacía</div>`;
+    status.textContent = `${kids.length} elemento${kids.length === 1 ? '' : 's'}${n.desc ? ' — ' + n.desc : ''}`;
+    $('[data-n="b"]', el).disabled = st.i === 0;
+    $('[data-n="f"]', el).disabled = st.i === st.stack.length - 1;
+    el.querySelectorAll('.side button').forEach(b => b.classList.toggle('on', sideNode(b.dataset.f) === n));
+    grid._kids = kids;
+  }
+  function go(n) { st.stack = st.stack.slice(0, st.i + 1); st.stack.push(n); st.i++; render(); }
+  grid.addEventListener('click', e => {
+    const f = e.target.closest('.fi');
+    grid.querySelectorAll('.fi.sel').forEach(x => x.classList.remove('sel'));
+    if (!f) return;
+    f.classList.add('sel');
+    if (matchMedia('(pointer:coarse)').matches) activate(f);
+  });
+  grid.addEventListener('dblclick', e => { const f = e.target.closest('.fi'); if (f) activate(f); });
+  grid.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.classList.contains('fi')) activate(e.target); });
+  const activate = f => { const it = grid._kids[+f.dataset.i]; it.type === 'folder' ? go(it) : openItem(it); };
+  el.querySelector('.side').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { const n = sideNode(b.dataset.f); if (n !== cur()) go(n); } });
+  $('[data-n="b"]', el).onclick = () => { if (st.i > 0) { st.i--; render(); } };
+  $('[data-n="f"]', el).onclick = () => { if (st.i < st.stack.length - 1) { st.i++; render(); } };
+  render();
+  return rec;
+}
+
+function openBrowser(it) {
+  const ext = it.type === 'pdf' ? 'PDF' : 'HTML';
+  const src = encodeURI(it.href);
+  const rec = makeWin({
+    kind: 'browser', title: it.name, icon: APPS.safari, w: 920, h: 580,
+    bar: `<div class="nav"><button data-n="b" aria-label="Atrás">${GLYPH.back}</button><button data-n="f" aria-label="Adelante">${GLYPH.fwd}</button></div>
+          <div class="url">${GLYPH.lock}<b>${esc(it.name)}</b></div>
+          <button class="tool" data-n="r" aria-label="Recargar" title="Recargar">${GLYPH.reload}</button>
+          <a class="tool" href="${esc(src)}" target="_blank" rel="noopener" aria-label="Abrir en una pestaña nueva" title="Abrir en una pestaña nueva">${GLYPH.out}</a>`,
+    body: `<iframe class="wframe" title="${esc(it.name)}" src="${esc(src)}"></iframe>`,
+  });
+  const fr = $('iframe', rec.el);
+  const hist = fn => { try { fr.contentWindow.history[fn](); } catch (e) {} };
+  $('[data-n="b"]', rec.el).onclick = () => hist('back');
+  $('[data-n="f"]', rec.el).onclick = () => hist('forward');
+  $('[data-n="r"]', rec.el).onclick = () => { try { fr.contentWindow.location.reload(); } catch (e) { fr.src = fr.src; } };
+  return rec;
+}
+
+function openNote(key, titleOverride) {
+  const n = NOTES[key];
+  return makeWin({ kind: 'note', title: titleOverride || n.title, icon: APPS.notes, w: 640, h: 520,
+    bar: `<div class="wt" style="text-align:center">${esc(n.title)}</div>`, body: `<div class="paper">${n.html()}</div>` });
+}
+
+function openAbout() {
+  return makeWin({ kind: 'about', title: 'Acerca de este escritorio', icon: APPS.finder, w: 380, h: 420,
+    bar: `<div class="wt" style="text-align:center">&nbsp;</div>`,
+    body: `<div class="about">${APPS.finder}<h1>Portafolio Web</h1><h3>Desarrollo Web 1 · ESEN</h3>
+      <dl><dt>Estudiante</dt><dd>Víctor López</dd><dt>Carnet</dt><dd>20255606</dd><dt>Guías</dt><dd>1, 2, 3, 5 y 6</dd><dt>Recursos</dt><dd>${flat.filter(i => i.type !== 'folder').length} ficheros</dd><dt>Tecnología</dt><dd>HTML, CSS y JavaScript</dd></dl></div>` });
+}
+
+function openItem(it) {
+  if (it.type === 'folder') return openFinder(it);
+  if (it.type === 'note') return openNote(it.note, it.name);
+  if (it.type === 'link') { window.open(it.href, '_blank', 'noopener'); toast('Abierto en una pestaña nueva'); return; }
+  return openBrowser(it);
+}
+
+/* =====================================================
+   Escritorio (iconos arrastrables)
+   ===================================================== */
+const desktop = $('#desktop');
+const deskItems = ROOT.kids;
+const placed = new Map(); // el -> {x,y,custom}
+function layoutDesktop() {
+  const cellW = 100, cellH = 100, rows = Math.max(1, Math.floor((desktop.clientHeight - 100) / cellH));
+  let c = 0, r = 0;
+  desktop.querySelectorAll('.di').forEach(el => {
+    const p = placed.get(el);
+    if (!p.custom) {
+      p.x = desktop.clientWidth - 12 - cellW * (c + 1) + 4; p.y = 14 + r * cellH;
+      if (++r >= rows) { r = 0; c++; }
+    } else { p.x = Math.min(p.x, desktop.clientWidth - 80); p.y = Math.min(p.y, desktop.clientHeight - 100); }
+    el.style.left = p.x + 'px'; el.style.top = p.y + 'px';
+  });
+}
+deskItems.forEach(it => {
+  const el = document.createElement('div');
+  el.className = 'di'; el.tabIndex = 0; el.setAttribute('role', 'button');
+  el.innerHTML = `${iconFor(it)}<span>${esc(it.name)}</span>`;
+  desktop.appendChild(el); placed.set(el, { x: 0, y: 0, custom: false });
+  let last = 0;
+  const select = () => { desktop.querySelectorAll('.di.sel').forEach(x => x.classList.remove('sel')); el.classList.add('sel'); };
+  el.addEventListener('pointerdown', e => {
+    if (e.button !== 0) return;
+    select();
+    const p = placed.get(el), sx = e.clientX, sy = e.clientY, ox = p.x, oy = p.y; let moved = false;
+    const move = ev => {
+      if (!moved && Math.hypot(ev.clientX - sx, ev.clientY - sy) < 5) return;
+      moved = true; el.classList.add('dragging'); p.custom = true;
+      p.x = Math.max(0, Math.min(desktop.clientWidth - 92, ox + ev.clientX - sx)); p.y = Math.max(0, Math.min(desktop.clientHeight - 90, oy + ev.clientY - sy));
+      el.style.left = p.x + 'px'; el.style.top = p.y + 'px';
+    };
+    const up = () => {
+      removeEventListener('pointermove', move); removeEventListener('pointerup', up); el.classList.remove('dragging');
+      if (moved) return;
+      const now = Date.now();
+      if (now - last < 450 || matchMedia('(pointer:coarse)').matches) { last = 0; openItem(it); } else last = now;
+    };
+    addEventListener('pointermove', move); addEventListener('pointerup', up);
+  });
+  el.addEventListener('keydown', e => { if (e.key === 'Enter') openItem(it); });
+});
+desktop.addEventListener('pointerdown', e => { if (e.target === desktop) { desktop.querySelectorAll('.di.sel').forEach(x => x.classList.remove('sel')); closeMenus(); } });
+addEventListener('resize', layoutDesktop);
+
+/* =====================================================
+   Dock
+   ===================================================== */
+const dock = $('#dock');
+const DOCK = [
+  { id: 'finder', label: 'Finder', icon: APPS.finder, act: () => openFinder(ROOT) },
+  { id: 'safari', label: 'Safari — Casa Rivas (versión final)', icon: APPS.safari, act: () => openBrowser(doc('Casa Rivas — versión final', 'casa_rivas_2/index.html')) },
+  { id: 'notes', label: 'Notas — Léeme', icon: APPS.notes, act: () => openNote('readme') },
+];
+dock.innerHTML = '';
+DOCK.forEach(d => addDock(d));
+dock.insertAdjacentHTML('beforeend', '<span class="dsep"></span>');
+addDock({ id: 'dl', label: 'Descargas — PDFs', icon: APPS.dl, act: () => openFinder(PDFS) });
+addDock({ id: 'trash', label: 'Papelera', icon: APPS.trash, act: () => { const t = $('[data-id="trash"]'); t.classList.remove('shake'); void t.offsetWidth; t.classList.add('shake'); toast('La papelera está vacía'); } });
+dock.insertAdjacentHTML('beforeend', '<span class="dsep hide" id="dockSep"></span><span id="dockMin" style="display:contents"></span>');
+function addDock(d) {
+  const b = document.createElement('button');
+  b.className = 'dk'; b.dataset.id = d.id; b.dataset.label = d.label; b.setAttribute('aria-label', d.label); b.innerHTML = d.icon;
+  b.onclick = d.act; dock.appendChild(b);
+}
+function updateSep() { $('#dockSep').classList.toggle('hide', !$('#dockMin').children.length); }
+function bounceDock(id) { const b = $(`.dk[data-id="${id}"]`); if (!b) return; b.classList.remove('bounce'); void b.offsetWidth; b.classList.add('bounce'); setTimeout(() => b.classList.remove('bounce'), 1500); }
+function syncDockDots() {
+  const kinds = new Set([...wins.values()].map(w => w.kind === 'browser' ? 'safari' : w.kind === 'note' ? 'notes' : 'finder'));
+  dock.querySelectorAll('.dk[data-id]').forEach(b => b.classList.toggle('on', kinds.has(b.dataset.id)));
+}
+// Efecto de magnificación
+const BASE = () => isMobile() ? 46 : 52, MAXG = () => isMobile() ? 0 : 38;
+dock.addEventListener('mousemove', e => {
+  dock.classList.remove('leave');
+  dock.querySelectorAll('.dk:not(.mini)').forEach(b => {
+    const r = b.getBoundingClientRect(), d = Math.abs(e.clientX - (r.left + r.width / 2));
+    const s = BASE() + MAXG() * Math.exp(-(d * d) / (2 * 55 * 55));
+    b.style.width = b.style.height = s + 'px';
+  });
+});
+dock.addEventListener('mouseleave', () => { dock.classList.add('leave'); dock.querySelectorAll('.dk').forEach(b => { b.style.width = b.style.height = ''; }); });
+
+/* =====================================================
+   Barra de menú
+   ===================================================== */
+const menusEl = $('#menus');
+let openMenu = null, appNameEl;
+const APPLE = `<svg viewBox="0 0 24 24"><path d="M16.400 12.700c0-2.400 2-3.500 2.100-3.600-1.200-1.700-3-1.900-3.600-2-1.500-.2-3 .9-3.800.9s-2-.9-3.300-.9C6.100 7.100 4.500 8.100 3.600 9.600c-1.800 3.100-.5 7.700 1.300 10.200.9 1.200 1.900 2.600 3.200 2.500 1.300 0 1.800-.8 3.300-.8s2 .8 3.300.8c1.400 0 2.200-1.200 3.100-2.400 1-1.400 1.400-2.800 1.400-2.900-.1 0-2.800-1.100-2.800-4.300zM13.900 5.300c.7-.9 1.200-2.100 1-3.300-1 0-2.300.7-3 1.600-.7.800-1.300 2-1.100 3.200 1.200.1 2.400-.6 3.100-1.500z"/></svg>`;
+const sep = { sep: true };
+const MENUS = [
+  { key: 'apple', label: APPLE, cls: 'apple', items: () => [
+    { t: 'Acerca de este escritorio', f: openAbout }, sep,
+    { t: 'Cambiar fondo de pantalla', f: cycleWall },
+    { t: document.documentElement.dataset.theme === 'dark' ? 'Modo claro' : 'Modo oscuro', f: toggleTheme }, sep,
+    { t: 'Buscar…', k: 'Ctrl K', f: openSpot } ] },
+  { key: 'app', label: 'Finder', cls: 'app', items: () => [
+    { t: 'Acerca de Finder', f: openAbout }, sep, { t: 'Cerrar todas las ventanas', f: () => [...wins.keys()].forEach(closeWin) } ] },
+  { key: 'file', label: 'Archivo', items: () => [
+    { t: 'Nueva ventana del Finder', f: () => openFinder(ROOT) },
+    { t: 'Cerrar ventana', f: () => focusedId && closeWin(focusedId), off: !focusedId } ] },
+  { key: 'edit', label: 'Edición', items: () => [ { t: 'Deshacer', off: true }, { t: 'Copiar', off: true }, { t: 'Pegar', off: true } ] },
+  { key: 'view', label: 'Visualización', items: () => [
+    { t: 'Reordenar iconos', f: () => { placed.forEach(p => p.custom = false); layoutDesktop(); } },
+    { t: 'Cambiar fondo de pantalla', f: cycleWall } ] },
+  { key: 'go', label: 'Ir', items: () => [
+    { t: 'Escritorio', f: () => openFinder(ROOT) }, sep, ...GUIDES.map(g => ({ t: g.name, f: () => openFinder(g) })), sep, { t: 'Descargas', f: () => openFinder(PDFS) } ] },
+  { key: 'win', label: 'Ventana', items: () => {
+    const l = [...wins.values()]; return l.length ? l.map(w => ({ t: w.title, f: () => focusWin(w.id) })) : [{ t: 'Sin ventanas abiertas', off: true }]; } },
+];
+MENUS.forEach(m => {
+  const b = document.createElement('button');
+  b.className = 'mb ' + (m.cls || ''); b.innerHTML = m.label; b.setAttribute('aria-haspopup', 'true');
+  if (m.key === 'app') appNameEl = b;
+  const dd = document.createElement('div'); dd.className = 'dd'; document.body.appendChild(dd);
+  const show = () => {
+    closeMenus(); dd.innerHTML = '';
+    m.items().forEach(i => {
+      if (i.sep) return dd.appendChild(document.createElement('hr'));
+      const it = document.createElement('button'); it.disabled = !!i.off; it.innerHTML = `<span>${esc(i.t)}</span>${i.k ? `<kbd>${i.k}</kbd>` : ''}`;
+      it.onclick = () => { closeMenus(); i.f && i.f(); }; dd.appendChild(it);
+    });
+    const r = b.getBoundingClientRect(); dd.style.left = Math.min(r.left, innerWidth - 240) + 'px'; dd.classList.add('show'); b.classList.add('open'); openMenu = { b, dd };
+  };
+  b.onclick = e => { e.stopPropagation(); openMenu && openMenu.b === b ? closeMenus() : show(); };
+  b.onmouseenter = () => { if (openMenu && openMenu.b !== b) show(); };
+  menusEl.appendChild(b);
+});
+function closeMenus() { if (openMenu) { openMenu.dd.classList.remove('show'); openMenu.b.classList.remove('open'); openMenu = null; } }
+function setAppName(n) { appNameEl.textContent = n; }
+addEventListener('click', e => { if (!e.target.closest('.dd,.mb')) closeMenus(); });
+
+/* ---------- Tema y fondo ---------- */
+function setTheme(t) { document.documentElement.dataset.theme = t; store.set('theme', t); }
+function toggleTheme() { setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'); }
+const wall = $('#wall');
+function setWall(n) { wall.dataset.w = n; store.set('wall', n); }
+function cycleWall() { setWall((+wall.dataset.w + 1) % 3); }
+
+/* ---------- Reloj ---------- */
+function tick() {
+  const d = new Date(), p = d.toLocaleDateString('es', { weekday: 'short', day: 'numeric', month: 'short' }).replace(/[.,]/g, '');
+  $('#clock').textContent = `${p} ${d.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit', hour12: false })}`;
+}
+
+/* =====================================================
+   Spotlight
+   ===================================================== */
+const spot = $('#spot'), spotq = $('#spotq'), spotl = $('#spotl');
+let spotRes = [], spotIdx = 0;
+function openSpot() { closeMenus(); spot.classList.add('show'); spotq.value = ''; renderSpot(); setTimeout(() => spotq.focus(), 30); }
+function closeSpot() { spot.classList.remove('show'); spotq.blur(); }
+function renderSpot() {
+  const q = norm(spotq.value.trim());
+  spotRes = (q ? flat.filter(i => norm(i.name + ' ' + i.path.join(' ') + ' ' + (i.desc || '')).includes(q)).sort((a, b) => norm(b.name).includes(q) - norm(a.name).includes(q)) : flat.filter(i => i.type === 'folder')).slice(0, 30);
+  spotIdx = 0;
+  spotl.innerHTML = spotRes.length ? spotRes.map((i, k) => `<li data-k="${k}" class="${k === 0 ? 'on' : ''}">${iconFor(i)}<div>${esc(i.name)}<small>${esc(i.path.slice(1).concat(i.type === 'folder' ? [] : []).join(' › ') || 'Escritorio')}${i.type === 'link' ? ' · Enlace externo' : i.type === 'pdf' ? ' · PDF' : ''}</small></div></li>`).join('') : `<li class="none">Sin resultados</li>`;
+  spotl.style.display = '';
+}
+function pickSpot(k) { const i = spotRes[k]; if (!i) return; closeSpot(); openItem(i); }
+spotq.addEventListener('input', renderSpot);
+spotq.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault(); if (!spotRes.length) return;
+    spotIdx = (spotIdx + (e.key === 'ArrowDown' ? 1 : -1) + spotRes.length) % spotRes.length;
+    spotl.querySelectorAll('li').forEach((li, k) => li.classList.toggle('on', k === spotIdx));
+    spotl.children[spotIdx].scrollIntoView({ block: 'nearest' });
+  } else if (e.key === 'Enter') pickSpot(spotIdx);
+});
+spotl.addEventListener('click', e => { const li = e.target.closest('li[data-k]'); if (li) pickSpot(+li.dataset.k); });
+spot.addEventListener('pointerdown', e => { if (e.target === spot) closeSpot(); });
+$('#btnSpot').onclick = e => { e.stopPropagation(); openSpot(); };
+addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); spot.classList.contains('show') ? closeSpot() : openSpot(); }
+  else if (e.key === 'Escape') { closeSpot(); closeMenus(); }
+});
+
+/* =====================================================
+   Arranque
+   ===================================================== */
+setTheme(store.get('theme') || (matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light'));
+setWall(+(store.get('wall') || 0));
+tick(); setInterval(tick, 15000);
+layoutDesktop();
+if (!isMobile()) setTimeout(() => { const r = openNote('readme'); r.el.style.left = '60px'; r.el.style.top = '70px'; r.el.style.width = '420px'; r.el.style.height = '400px'; }, 350);
+})();
+</script>
 </body>
 </html>
