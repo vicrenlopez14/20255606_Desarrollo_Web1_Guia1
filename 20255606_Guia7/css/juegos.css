@@ -1,0 +1,39 @@
+.juego-card {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.juego-card:hover,
+.juego-card:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  outline: none;
+}
+
+.juego-card .card-img-top {
+  aspect-ratio: 365 / 206;
+  object-fit: cover;
+  background: #e9ecef;
+}
+
+.juego-card .card-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.detalle-capturas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.5rem;
+}
+
+.detalle-capturas img {
+  width: 100%;
+  border-radius: 0.375rem;
+}
+
+.detalle-descripcion {
+  white-space: pre-line;
+}

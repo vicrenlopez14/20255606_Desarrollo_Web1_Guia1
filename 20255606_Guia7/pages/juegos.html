@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/styles.css" rel="stylesheet" />
+    <link href="../css/juegos.css" rel="stylesheet" />
+    <link rel="icon" href="../img/js.png" sizes="32x32" type="image/png" />
+    <title>Catálogo de juegos gratuitos</title>
+</head>
+
+<body>
+
+    <header class="p-3 text-bg-dark">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="../index.html" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                    <img src="../img/js.png" class="bi me-2" width="48" height="48" alt="JavaScript">
+                </a>
+
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="../pages/ejemplo1.html" class="nav-link px-2 text-white">Ejemplo 1</a></li>
+                    <li><a href="../pages/ejemplo2.html" class="nav-link px-2 text-white">Ejemplo 2</a></li>
+                    <li><a href="../pages/ejemplo3.html" class="nav-link px-2 text-white">Ejemplo 3</a></li>
+                    <li><a href="../pages/ejemplo4.html" class="nav-link px-2 text-white">Ejemplo 4</a></li>
+                    <li><a href="../pages/juegos.html" class="nav-link px-2 text-warning fw-bold">
+                            <i class="bi bi-check"></i> API de juegos
+                        </a></li>
+                </ul>
+
+                <div class="text-end">
+                    <button type="button" class="btn btn-outline-light" id="idBtnConfig" data-bs-toggle="modal"
+                        data-bs-target="#idModalKey">
+                        <i class="bi bi-key"></i> API Key
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container py-5">
+        <div class="text-center mb-4">
+            <h1 class="display-5 fw-bold">Catálogo de juegos gratuitos</h1>
+            <p class="lead text-body-secondary mb-0">
+                Datos de la API <span class="fw-bold">Free-to-Play Games Database</span> (RapidAPI),
+                consumida con <code>fetch</code> y <code>async/await</code>.
+            </p>
+        </div>
+
+        <!-- Filtros del listado -->
+        <form id="idFiltros" class="row g-2 align-items-end mb-4">
+            <div class="col-12 col-md-3">
+                <label for="idPlataforma" class="form-label fw-bold">Plataforma</label>
+                <select id="idPlataforma" class="form-select">
+                    <option value="all">Todas</option>
+                    <option value="pc">PC (Windows)</option>
+                    <option value="browser">Navegador</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-3">
+                <label for="idCategoria" class="form-label fw-bold">Categoría</label>
+                <select id="idCategoria" class="form-select">
+                    <option value="">Todas</option>
+                    <option value="mmorpg">MMORPG</option>
+                    <option value="shooter">Shooter</option>
+                    <option value="strategy">Estrategia</option>
+                    <option value="moba">MOBA</option>
+                    <option value="racing">Carreras</option>
+                    <option value="sports">Deportes</option>
+                    <option value="social">Social</option>
+                    <option value="sandbox">Sandbox</option>
+                    <option value="open-world">Mundo abierto</option>
+                    <option value="survival">Supervivencia</option>
+                    <option value="pvp">PvP</option>
+                    <option value="fantasy">Fantasía</option>
+                    <option value="sci-fi">Ciencia ficción</option>
+                    <option value="anime">Anime</option>
+                    <option value="card">Cartas</option>
+                    <option value="battle-royale">Battle Royale</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-2">
+                <label for="idOrden" class="form-label fw-bold">Ordenar por</label>
+                <select id="idOrden" class="form-select">
+                    <option value="relevance">Relevancia</option>
+                    <option value="popularity">Popularidad</option>
+                    <option value="release-date">Lanzamiento</option>
+                    <option value="alphabetical">Alfabético</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-2">
+                <label for="idBuscar" class="form-label fw-bold">Buscar</label>
+                <input type="search" id="idBuscar" class="form-control" placeholder="Nombre…">
+            </div>
+            <div class="col-12 col-md-2 d-grid">
+                <button type="submit" class="btn btn-primary" id="idBtnCargar">
+                    <i class="bi bi-arrow-repeat"></i> Cargar
+                </button>
+            </div>
+        </form>
+
+        <!-- Mensajes de estado (carga, errores, vacio) -->
+        <div id="idEstado" aria-live="polite"></div>
+
+        <p id="idContador" class="text-body-secondary small"></p>
+
+        <!-- Listado de recursos -->
+        <div id="idListado" class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-3"></div>
+
+        <div class="text-center mt-4">
+            <button type="button" id="idBtnMas" class="btn btn-outline-primary d-none">
+                Mostrar más
+            </button>
+        </div>
+    </main>
+
+    <!-- MODAL: detalle del juego -->
+    <div class="modal fade" id="idModalDetalle" tabindex="-1" aria-labelledby="idTituloDetalle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="idTituloDetalle">Detalle</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body" id="idCuerpoDetalle"></div>
+                <div class="modal-footer">
+                    <a href="#" target="_blank" rel="noopener" class="btn btn-success d-none" id="idLinkJugar">
+                        <i class="bi bi-controller"></i> Jugar
+                    </a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: configuracion de la API Key -->
+    <div class="modal fade" id="idModalKey" tabindex="-1" aria-labelledby="idTituloKey" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="idFormKey">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="idTituloKey"><i class="bi bi-key"></i> API Key de RapidAPI</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="small">
+                            Suscríbase al plan gratuito (<em>Basic</em>) de
+                            <a href="https://rapidapi.com/digiwalls/api/free-to-play-games-database" target="_blank"
+                                rel="noopener">Free-to-Play Games Database</a> y pegue aquí su
+                            <code>X-RapidAPI-Key</code>. Se guarda solo en este navegador (localStorage), nunca en el
+                            repositorio.
+                        </p>
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="idApiKey" placeholder="API Key"
+                                autocomplete="off">
+                            <label for="idApiKey">X-RapidAPI-Key</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger me-auto" id="idBtnBorrarKey">Borrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar y cargar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/juegos.js" defer></script>
+</body>
+
+</html>
